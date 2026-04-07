@@ -1,5 +1,5 @@
-import anthropic
-from fastapi import FastAPI
+from groq import Groq
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
@@ -16,26 +16,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = anthropic.Anthropic()
-
 class Message(BaseModel):
     message: str
+
+client = Groq()
 
 @app.post("/chat")
 def chat(body: Message):
     try:
         conversation_history.append({"role": "user", "content": body.message})
-        response = client.messages.create(
-            model="claude-haiku-4-5-20251001",
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
             max_tokens=1024,
-            system="You are a helpful and understanding online assistant trying to help customers with troubleshooting/complaints with Direct Supply.",
-            messages=conversation_history
+            messages=[
+                {"role": "system", "content": "You are a helpful and understanding online assistant trying to help customers with troubleshooting/complaints with Direct Supply."},
+                *conversation_history
+            ]
         )
-        reply = response.content[0].text
+        reply = response.choices[0].message.content
         conversation_history.append({"role": "assistant", "content": reply})
-
         return {"reply": reply}
-    
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
