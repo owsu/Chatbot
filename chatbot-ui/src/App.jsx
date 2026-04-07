@@ -8,6 +8,7 @@ function App() {
     const [loading, setLoading] = useState(false)
     const bottomRef = useRef(null)
 
+    // Automatically scrolls to the bottom of the conversation whenever a new message is inputted
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
@@ -18,8 +19,9 @@ function App() {
         const userMessage = {role: "user", content: input}
         setMessages(prev => [...prev, userMessage])
         setInput("")
-        setLoading(true)
+        setLoading(true) // The time between the finally block and this setLoading is the response time
 
+        // Fires the message to the backend
         try {
             const response = await fetch("http://localhost:8000/chat", {
                 method: "POST",
@@ -32,11 +34,12 @@ function App() {
         } catch (error) {
             console.log(error)
         } finally {
-            setLoading(false)
+            setLoading(false) 
         }
     }
 
 
+    // Sends the message when you press enter
     const onKeyPress = (e) => {
         if (e.key === "Enter") sendMessage()
     }
