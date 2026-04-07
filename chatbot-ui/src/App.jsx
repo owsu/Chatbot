@@ -16,7 +16,7 @@ function App() {
         if (!input.trim()) return // If the user just send nothing
 
         const userMessage = {role: "user", content: input}
-        setMessage(prev => [...prev, userMessage])
+        setMessages(prev => [...prev, userMessage])
         setInput("")
         setLoading(true)
 
