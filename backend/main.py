@@ -1,4 +1,4 @@
-import anthropic
+from groq import Groq
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
