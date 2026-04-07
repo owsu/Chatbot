@@ -13,10 +13,10 @@ function App() {
     }, [messages])
 
     const sendMessage = async() => {
-        if (!input.item()) return // If the user just send nothing
+        if (!input.trim()) return // If the user just send nothing
 
         const userMessage = {role: "user", content: input}
-        sendMessage(prev => [...prev, userMessage])
+        setMessage(prev => [...prev, userMessage])
         setInput("")
         setLoading(true)
 
