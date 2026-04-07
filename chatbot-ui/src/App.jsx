@@ -43,6 +43,7 @@ function App() {
 
     return (
         <div className="chat-container">
+            <div className="chat-header">Direct Supply Assistant</div>
             <div className="message-area">
                 {messages.map((msg, index) => (
                     <Message key={index} role={msg.role} content={msg.content}/>
